@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.krios.pentaho.plugin.classic</groupId>
+  <artifactId>hz-websocket</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <properties>
+    <project.author>Kleyson Rios</project.author>
+    <project.url>http://kleysonrios.blogspot.com</project.url>
+    <dependency.pentaho.platform.version>8.0.0.0-28</dependency.pentaho.platform.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>  
+  </properties>  
+  
+  <name>Pentaho Hazelcast Websocket</name>
+  <description>Pentaho plugin to enable a Websocket endpoint sourcing data from Hazelcast</description>
+  
+  <repositories>
+    <repository>
+      <id>pentaho-public</id>
+      <name>Pentaho Public</name>
+      <url>http://nexus.pentaho.org/content/groups/omni/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>interval:15</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>   
+ 
+  <dependencies>
+  
+    <!-- platform (provided) dependencies -->
+    <dependency>
+        <groupId>pentaho</groupId>
+        <artifactId>pentaho-platform-api</artifactId>
+        <version>${dependency.pentaho.platform.version}</version>
+        <scope>provided</scope>
+    </dependency>
+ 
+    <dependency>
+        <groupId>pentaho</groupId>
+        <artifactId>pentaho-platform-core</artifactId>
+        <version>${dependency.pentaho.platform.version}</version>
+        <scope>provided</scope>
+    </dependency>
+        
+    <!-- Websockets API - JSR-356 dependencies -->
+    <dependency>
+    	<groupId>org.apache.tomcat</groupId>
+        <artifactId>tomcat-websocket</artifactId>
+        <version>8.0.47</version>
+        <scope>provided</scope>
+    </dependency>   
+    
+    
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-websocket</artifactId>
+	    <version>4.3.2.RELEASE</version>
+	</dependency>
+ 
+  </dependencies> 
+
+  <build>
+	<plugins>
+	    <plugin>
+	    	<artifactId>maven-resources-plugin</artifactId>
+	        <version>2.6</version>
+	        <executions>
+	        	<execution>
+	            	<id>copy-resources</id>
+	                <phase>validate</phase>
+	                <goals>
+	                	<goal>copy-resources</goal>
+	                </goals>
+	                <configuration>
+	                <outputDirectory>${basedir}/target/${project.artifactId}</outputDirectory>
+	                	<resources>
+	                    	<resource>
+	                        	<directory>src/main/resources</directory>
+	                            <filtering>true</filtering>
+	                   		</resource>
+	                	</resources>
+	                </configuration>
+	            </execution>
+	        </executions>
+		</plugin>
+	    <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-dependency-plugin</artifactId>
+	        <executions>
+	        	<execution>
+	            	<id>copy-dependencies</id>
+	                <phase>prepare-package</phase>
+	                <goals>
+	                	<goal>copy-dependencies</goal>
+	                </goals>
+	                <configuration>
+		                <outputDirectory>${project.build.directory}/${project.artifactId}/lib</outputDirectory>
+		                <overWriteReleases>false</overWriteReleases>
+		                <overWriteSnapshots>false</overWriteSnapshots>
+		                <overWriteIfNewer>true</overWriteIfNewer>
+		                <includeScope>runtime</includeScope>   
+	                </configuration>
+	            </execution>
+	    	</executions>
+	    </plugin>
+	    <plugin>
+	    	<groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-antrun-plugin</artifactId>
+	        <version>1.6</version>
+	        <executions>
+	            <execution>
+	                <phase>package</phase>
+	                <configuration>
+	                    <tasks>
+	                    <copy
+	                        file="${build.directory}/${project.artifactId}-${project.version}.jar"
+	                        todir="${project.build.directory}/${project.artifactId}/lib" />
+	                    </tasks>
+	                </configuration>
+	                <goals>
+	                    <goal>run</goal>
+	                </goals>
+	            </execution>
+	    	</executions>
+		</plugin>                     
+	</plugins>  
+  </build>
+</project>
