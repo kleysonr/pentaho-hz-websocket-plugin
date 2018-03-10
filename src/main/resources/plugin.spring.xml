@@ -12,6 +12,8 @@
                            http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
     <context:annotation-config />
+    
+    <context:component-scan base-package="com.krios.pentaho.plugin.classic.hzwebsocket" />
 
     <!-- Register with PentahoSystem -->
     <bean class="org.pentaho.platform.engine.core.system.objfac.spring.ApplicationContextPentahoSystemRegisterer" scope="singleton"/>
@@ -20,14 +22,5 @@
         <pen:publish as-type="CLASSES">
         </pen:publish>
         </bean>
-
-    <websocket:handlers  allowed-origins="*">
-        <websocket:mapping path="/ws" handler="websocketService"/>
-        <websocket:handshake-interceptors>
-            <bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
-        </websocket:handshake-interceptors>
-    </websocket:handlers>    
-
-    <bean id="websocketService" class="com.krios.pentaho.plugin.classic.hzwebsocket.services.SocketHandler"/>
 
 </beans>
