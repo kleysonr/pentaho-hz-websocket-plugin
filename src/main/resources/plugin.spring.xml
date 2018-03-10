@@ -21,9 +21,12 @@
         </pen:publish>
         </bean>
 
-    <websocket:handlers allowed-origins="*">
+    <websocket:handlers  allowed-origins="*">
         <websocket:mapping path="/ws" handler="websocketService"/>
-    </websocket:handlers>
+        <websocket:handshake-interceptors>
+            <bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+    </websocket:handlers>    
 
     <bean id="websocketService" class="com.krios.pentaho.plugin.classic.hzwebsocket.services.SocketHandler"/>
 
